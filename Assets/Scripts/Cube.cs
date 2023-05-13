@@ -14,6 +14,7 @@ public class Cube : MonoBehaviour
     private void Awake()
     {
         _cubeMaterial = GetComponent<MeshRenderer>().material;
+        _startColor = _cubeMaterial.color;
     }
 
     public IEnumerator ChangeColor(Color nextColor)
