@@ -13,7 +13,7 @@ public class Cube : MonoBehaviour
         _cubeMaterial = GetComponent<MeshRenderer>().material;
     }
 
-    public IEnumerator ChangeColor(Color nextColor)
+    public IEnumerator ChangeColor(Color endColor)
     {
         var startColor = _cubeMaterial.color;
         var currentTime = 0f;
@@ -22,7 +22,7 @@ public class Cube : MonoBehaviour
         {
             var recoloringProgress = currentTime / _recoloringDuration;
 
-            var currentColor = Color.Lerp(startColor, nextColor, recoloringProgress);
+            var currentColor = Color.Lerp(startColor, endColor, recoloringProgress);
             _cubeMaterial.color = currentColor;
             currentTime += Time.deltaTime;
 
