@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CubeRecoloring : MonoBehaviour
@@ -12,9 +13,9 @@ public class CubeRecoloring : MonoBehaviour
     [SerializeField]
     private CoroutinesManager _coroutinesManager;
     
-    private Transform[,] _cubes;
+    private List<Cube> _cubes;
 
-    private void Awake()
+    private void Start()
     {
         _cubes = _cubeSpawner.GetSpawnedCubes();
     }
@@ -27,15 +28,12 @@ public class CubeRecoloring : MonoBehaviour
     private IEnumerator RecolorCubes()
     {
         var nextColor = Random.ColorHSV();
-        
-        for (var y = 0; y < _cubes.GetLength(1); y++)
+      
+        for (var i = 0; i < _cubes.Count; i++)
         {
-            for (var x = 0; x < _cubes.GetLength(0); x++)
-            {
-                var currentCube = _cubes[x, y].GetComponent<Cube>();
-                _coroutinesManager.StartCoroutine(currentCube.ChangeColor(nextColor));
-                yield return new WaitForSeconds(_recoloringDelay);
-            }
+            var currentCube = _cubes[i];
+            currentCube.ChangeColor(nextColor);
+            yield return new WaitForSeconds(_recoloringDelay);
         }
     }
 }

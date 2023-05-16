@@ -13,7 +13,13 @@ public class Cube : MonoBehaviour
         _cubeMaterial = GetComponent<MeshRenderer>().material;
     }
 
-    public IEnumerator ChangeColor(Color endColor)
+    public void ChangeColor(Color endColor)
+    {
+        StopAllCoroutines();
+        StartCoroutine(ChangeColorCoroutine(endColor));
+    }
+    
+    private IEnumerator ChangeColorCoroutine(Color endColor)
     {
         var startColor = _cubeMaterial.color;
         var currentTime = 0f;

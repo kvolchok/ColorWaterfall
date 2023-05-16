@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CubeSpawner : MonoBehaviour
@@ -9,7 +10,7 @@ public class CubeSpawner : MonoBehaviour
     private int _mapHeigth = 20;
     
     [SerializeField]
-    private Vector2 _startSpawnPosition;
+    private Transform _startSpawnPoint;
     [SerializeField]
     private float _nextSpawnDistance = 0.4f;
     
@@ -17,17 +18,12 @@ public class CubeSpawner : MonoBehaviour
     private float _nextSpawnDelay = 0.04f;
     
     [SerializeField]
-    private Transform _cubePrefab;
+    private Cube _cubePrefab;
 
     [SerializeField]
     private CoroutinesManager _coroutinesManager;
-
-    private Transform[,] _cubes;
-
-    private void Awake()
-    {
-        _cubes = new Transform[_mapWidth, _mapHeigth];
-    }
+    
+    private readonly List<Cube> _cubes = new();
 
     private void Start()
     {
@@ -36,19 +32,21 @@ public class CubeSpawner : MonoBehaviour
 
     private IEnumerator SpawnCubes()
     {
-        for (var y = 0; y < _cubes.GetLength(1); y++)
+        for (var y = 0; y < _mapWidth; y++)
         {
-            for (var x = 0; x < _cubes.GetLength(0); x++)
+            for (var x = 0; x < _mapHeigth; x++)
             {
-                var spawnPosition = _startSpawnPosition + new Vector2(x, -y) * _nextSpawnDistance;
-                _cubes[x, y] = Instantiate(_cubePrefab, spawnPosition, Quaternion.identity);
-                
+                var spawnPosition = _startSpawnPoint.position
+                                    + new Vector3(x, -y) * _nextSpawnDistance;
+                var cube = Instantiate(_cubePrefab, spawnPosition, Quaternion.identity);
+                _cubes.Add(cube);
+
                 yield return new WaitForSeconds(_nextSpawnDelay);
             }
         }
     }
 
-    public Transform[,] GetSpawnedCubes()
+    public List<Cube> GetSpawnedCubes()
     {
         return _cubes;
     }
